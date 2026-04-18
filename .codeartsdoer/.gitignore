@@ -1,0 +1,17 @@
+# 忽略依赖包 (非常重要，不需要上传)
+node_modules/
+
+# 忽略环境变量文件 (包含数据库密码，绝对不要上传)
+.env
+
+# 忽略 IDE 的特定配置 (你截图里的那些云效文件)
+.codeartsdoer/
+.vscode/settings.json
+
+# 忽略系统文件
+.DS_Store
+Thumbs.db
+
+# 允许上传 package.json 和 package-lock.json
+!package.json
+!package-lock.json
