@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>观影系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #0c0c0c;
+        }
+        .section-title {
+            border-left: 4px solid #0d6efd;
+            padding-left: 12px;
+            margin: 30px 0 20px 0;
+            font-weight: 600;
+        }
+        .movie-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 16px rgba(0, 0, 0, 0.2);
+        }
+        .movie-card img {
+            height: 300px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 15px;
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .rating-stars {
+            color: #fd7e14;
+        }
+        .recommendation-reason {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 12px;
+        }
+        .badge {
+            font-size: 0.7rem;
+            z-index: 1;
+        }
+        .search-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        .filter-btn {
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .footer {
+            background-color: #212529;
+            color: #fff;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+        .genre-tag {
+            display: inline-block;
+            background-color: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-camera-reels me-2"></i>观影系统
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">电影库</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">我的收藏</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="搜索电影..." aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">搜索</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区 -->
+    <div class="container py-4">
+        <!-- 搜索和筛选区 -->
+        <div class="search-container">
+            <h5>发现你喜欢的电影</h5>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="输入电影名称、演员或导演..." id="search-input">
+                        <button class="btn btn-primary" type="button" id="search-button">
+                            <i class="bi bi-search"></i> 搜索
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex flex-wrap">
+                        <button class="btn btn-outline-primary filter-btn" data-genre="action">动作</button>
+                        <button class="btn btn-outline-primary filter-btn" data-genre="comedy">喜剧</button>
+                        <button class="btn btn-outline-primary filter-btn" data-genre="sci-fi">科幻</button>
+                        <button class="btn btn-outline-primary filter-btn" data-genre="drama">剧情</button>
+                        <button class="btn btn-outline-primary filter-btn" data-genre="horror">恐怖</button>
+                        <button class="btn btn-outline-primary filter-btn" data-genre="all">全部</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索提示区 -->
+        <div class="alert alert-info d-flex align-items-center" role="alert">
+            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+            <div>根据您的观影喜好，我们为您推荐以下内容</div>
+        </div>
+
+        <!-- 为你推荐 -->
+        <h3 class="section-title">为你推荐</h3>
+        <div class="row" id="personal-recommendations">
+            <!-- 电影卡片将通过JavaScript动态加载 -->
+        </div>
+
+        <!-- 热门榜单 -->
+        <h3 class="section-title">热门榜单</h3>
+        <div class="row" id="hot-movies">
+            <!-- 热门电影将通过JavaScript动态加载 -->
+        </div>
+
+        <!-- 分类推荐 -->
+        <h3 class="section-title">分类推荐</h3>
+        <ul class="nav nav-tabs" id="genreTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="sci-fi-tab" data-bs-toggle="tab" data-bs-target="#sci-fi" type="button" role="tab">科幻</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="action-tab" data-bs-toggle="tab" data-bs-target="#action" type="button" role="tab">动作</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="comedy-tab" data-bs-toggle="tab" data-bs-target="#comedy" type="button" role="tab">喜剧</button>
+            </li>
+        </ul>
+        <div class="tab-content p-3 border-start border-end border-bottom rounded-bottom" id="genreTabContent">
+            <div class="tab-pane fade show active" id="sci-fi" role="tabpanel">
+                <div class="row" id="sci-fi-movies">
+                    <!-- 科幻电影将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            <div class="tab-pane fade" id="action" role="tabpanel">
+                <div class="row" id="action-movies">
+                    <!-- 动作电影将通过JavaScript动态加载 -->
+                </div>
+            </div>
+            <div class="tab-pane fade" id="comedy" role="tabpanel">
+                <div class="row" id="comedy-movies">
+                    <!-- 喜剧电影将通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>电影推荐系统</h5>
+                    <p>为您提供个性化的电影推荐服务，发现更多您可能喜欢的电影。</p>
+                </div>
+                <div class="col-md-2">
+                    <h5>链接</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">首页</a></li>
+                        <li><a href="#" class="text-white">电影库</a></li>
+                        <li><a href="#" class="text-white">我的收藏</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>联系我们</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-envelope me-2"></i> contact@movierec.com</li>
+                        <li><i class="bi bi-telephone me-2"></i> +86 123 4567 8901</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>关注我们</h5>
+                    <div class="d-flex">
+                        <a href="#" class="text-white me-3"><i class="bi bi-wechat fs-4"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-weibo fs-4"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-4"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4 bg-light">
+            <div class="text-center">
+                <p class="mb-0">© 2023 电影推荐系统. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 电影详情模态框 -->
+    <div class="modal fade" id="movieDetailModal" tabindex="-1" aria-labelledby="movieDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="movieDetailModalLabel">电影详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="movie-detail-content">
+                    <!-- 电影详情内容将通过JavaScript动态加载 -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary"><i class="bi bi-play-circle me-1"></i>立即观看</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 模拟电影数据（实际应用中应从数据库获取）
+        const movies = [
+            {
+                id: 1,
+                title: "盗梦空间",
+                rating: 4.5,
+                image: "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_FMjpg_UX600_.jpg",
+                genres: ["科幻", "动作", "惊悚"],
+                director: "克里斯托弗·诺兰",
+                year: 2010,
+                reason: "因为你喜欢《星际穿越》",
+                isHot: true,
+                rank: 4,
+                description: "一名能够潜入他人梦境窃取秘密的窃贼，被赋予了一个看似不可能的任务：不是窃取想法，而是植入一个想法。"
+            },
+            {
+                id: 2,
+                title: "星际穿越",
+                rating: 4.9,
+                image: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX600_.jpg",
+                genres: ["科幻", "冒险", "剧情"],
+                director: "克里斯托弗·诺兰",
+                year: 2014,
+                reason: "基于您选择的科幻标签",
+                isHot: true,
+                rank: 2,
+                description: "一群探险家利用新发现的虫洞，超越人类太空旅行的极限，在浩瀚宇宙中进行星际航行。"
+            },
+            {
+                id: 3,
+                title: "蝙蝠侠：黑暗骑士",
+                rating: 4.2,
+                image: "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX600_.jpg",
+                genres: ["动作", "犯罪", "剧情"],
+                director: "克里斯托弗·诺兰",
+                year: 2008,
+                reason: "同导演：克里斯托弗·诺兰",
+                isHot: true,
+                rank: 1,
+                description: "当小丑这样的威胁迫使蝙蝠侠接近 crossing the line between hero and vigilante 时，哥谭市需要它的黑暗骑士。"
+            },
+            {
+                id: 4,
+                title: "记忆碎片",
+                rating: 4.3,
+                image: "https://m.media-amazon.com/images/M/MV5BZTcyNjk1MjgtOWI3Mi00YzQwLWI5MTktMzY4ZmI2NDAyNzYzXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX600_.jpg",
+                genres: ["悬疑", "惊悚"],
+                director: "克里斯托弗·诺兰",
+                year: 2000,
+                reason: "相似叙事结构的电影",
+                isHot: false,
+                description: "一个患有短期失忆症的男子试图追踪杀害他妻子的人，利用笔记和纹身来记录信息。"
+            },
+            {
+                id: 5,
+                title: "指环王：王者归来",
+                rating: 4.8,
+                image: "https://m.media-amazon.com/images/M/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_FMjpg_UX300_.jpg",
+                genres: ["冒险", "奇幻", "剧情"],
+                director: "彼得·杰克逊",
+                year: 2003,
+                reason: "高评分奇幻电影",
+                isHot: true,
+                rank: 3,
+                description: "甘道夫和阿拉贡领导中土世界对抗索伦的军队，吸引他的注意力从弗罗多和山姆身上移开，他们接近魔多与魔戒。"
+            },
+            {
+                id: 6,
+                title: "辛德勒的名单",
+                rating: 4.9,
+                image: "https://m.media-amazon.com/images/M/MV5BNDE4OTMxMTctNmRhYy00NWE2LTg3YzItYTk3M2UwOTU5Njg4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX300_.jpg",
+                genres: ["剧情", "历史", "战争"],
+                director: "史蒂文·斯皮尔伯格",
+                year: 1993,
+                reason: "经典高分战争片",
+                isHot: true,
+                rank: 5,
+                description: "在波兰德国占领期间，奥斯卡·辛德勒通过在他的工厂雇佣他们来拯救一千多名犹太人的生命。"
+            },
+            {
+                id: 7,
+                title: "教父",
+                rating: 4.9,
+                image: "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_FMjpg_UX300_.jpg",
+                genres: ["犯罪", "剧情"],
+                director: "弗朗西斯·福特·科波拉",
+                year: 1972,
+                reason: "影史经典必看",
+                isHot: true,
+                rank: 6,
+                description: "黑手党家族的老族长将企业控制权移交给他不愿接手的儿子。"
+            },
+            {
+                id: 8,
+                title: "黑客帝国",
+                rating: 4.7,
+                image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX600_.jpg",
+                genres: ["动作", "科幻"],
+                director: "拉娜·沃卓斯基, 莉莉·沃卓斯基",
+                year: 1999,
+                reason: "科幻经典之作",
+                isHot: false,
+                description: "一名计算机黑客从神秘的反叛者那里了解到他的现实的真实性质以及他在与那些控制它的人的战争中的作用。"
+            }
+        ];
+
+        // 渲染电影卡片
+        function renderMovieCard(movie, isHot = false) {
+            const stars = generateStars(movie.rating);
+            const genres = movie.genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('');
+            
+            return `
+                <div class="col-xl-3 col-lg-4 col-md-6">
+                    <div class="card movie-card">
+                        ${isHot ? `<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">${movie.rank}</span>` : ''}
+                        <img src="${movie.image}" class="card-img-top" alt="${movie.title}">
+                        <div class="card-body">
+                            <h5 class="card-title">${movie.title}</h5>
+                            <div class="rating-stars mb-2">
+                                ${stars}
+                                <span class="ms-1">${movie.rating}</span>
+                            </div>
+                            <div class="mb-2">${genres}</div>
+                            ${movie.reason ? `<p class="recommendation-reason"><i class="bi bi-lightbulb"></i> ${movie.reason}</p>` : ''}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="#" class="btn btn-sm btn-outline-primary view-detail" data-movie-id="${movie.id}">查看详情</a>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-bookmark"></i></button>
+                                    <button class="btn btn-sm btn-outline-success"><i class="bi bi-play-circle"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 生成星级评分
+        function generateStars(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="bi bi-star-fill"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="bi bi-star-half"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="bi bi-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        // 加载推荐电影
+        function loadPersonalRecommendations() {
+            const container = document.getElementById('personal-recommendations');
+            // 获取前4部电影作为推荐
+            const recommendedMovies = movies.slice(0, 4);
+            
+            container.innerHTML = recommendedMovies.map(movie => renderMovieCard(movie)).join('');
+        }
+
+        // 加载热门电影
+        function loadHotMovies() {
+            const container = document.getElementById('hot-movies');
+            const hotMovies = movies.filter(movie => movie.isHot).sort((a, b) => a.rank - b.rank);
+            
+            // 热门电影使用不同的布局（col-xl-2）
+            container.innerHTML = hotMovies.map(movie => `
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                    <div class="card movie-card">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            ${movie.rank}
+                        </span>
+                        <img src="${movie.image}" class="card-img-top" alt="${movie.title}">
+                        <div class="card-body p-2">
+                            <h6 class="card-title mb-0">${movie.title}</h6>
+                            <small class="text-muted">${movie.genres.join('/')}</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 加载分类电影
+        function loadMoviesByGenre() {
+            const sciFiMovies = movies.filter(movie => movie.genres.includes('科幻')).slice(0, 4);
+            const actionMovies = movies.filter(movie => movie.genres.includes('动作')).slice(0, 4);
+            const comedyMovies = movies.filter(movie => movie.genres.includes('喜剧')).slice(0, 4);
+            
+            document.getElementById('sci-fi-movies').innerHTML = sciFiMovies.map(movie => renderMovieCard(movie)).join('');
+            document.getElementById('action-movies').innerHTML = actionMovies.map(movie => renderMovieCard(movie)).join('');
+            document.getElementById('comedy-movies').innerHTML = comedyMovies.map(movie => renderMovieCard(movie)).join('');
+        }
+
+        // 显示电影详情
+        function showMovieDetail(movieId) {
+            const movie = movies.find(m => m.id === movieId);
+            if (!movie) return;
+            
+            const stars = generateStars(movie.rating);
+            const genres = movie.genres.map(genre => `<span class="badge bg-secondary me-1">${genre}</span>`).join('');
+            
+            document.getElementById('movieDetailModalLabel').textContent = movie.title;
+            document.getElementById('movie-detail-content').innerHTML = `
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="${movie.image}" class="img-fluid rounded" alt="${movie.title}">
+                    </div>
+                    <div class="col-md-8">
+                        <h4>${movie.title} (${movie.year})</h4>
+                        <div class="rating-stars mb-2">
+                            ${stars}
+                            <span class="ms-1">${movie.rating}</span>
+                        </div>
+                        <p class="mb-2"><strong>导演:</strong> ${movie.director}</p>
+                        <p class="mb-2"><strong>类型:</strong> ${genres}</p>
+                        <p><strong>简介:</strong> ${movie.description}</p>
+                    </div>
+                </div>
+            `;
+            
+            const movieModal = new bootstrap.Modal(document.getElementById('movieDetailModal'));
+            movieModal.show();
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPersonalRecommendations();
+            loadHotMovies();
+            loadMoviesByGenre();
+            
+            // 添加查看详情事件监听
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('view-detail') || e.target.closest('.view-detail')) {
+                    e.preventDefault();
+                    const movieId = parseInt(e.target.closest('.view-detail').getAttribute('data-movie-id'));
+                    showMovieDetail(movieId);
+                }
+            });
+            
+            // 添加筛选按钮事件监听
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const genre = this.getAttribute('data-genre');
+                    alert(`筛选: ${genre} 类型的电影 - 实际应用中这里会筛选电影列表`);
+                });
+            });
+            
+            // 搜索功能
+            document.getElementById('search-button').addEventListener('click', function() {
+                const searchTerm = document.getElementById('search-input').value;
+                if (searchTerm.trim()) {
+                    alert(`搜索: ${searchTerm} - 实际应用中这里会执行搜索`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
