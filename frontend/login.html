@@ -85,26 +85,45 @@
     <script>
         // 检查是否已登录
         if (checkLogin()) {
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         }
         
         // 登录表单提交
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const username = document.getElementById('username').value;
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             
-            const result = await userAPI.login({ username, password });
+            if (!username || !password) {
+                showMessage('请填写用户名和密码', 'warning');
+                return;
+            }
             
-            if (result.code === 200) {
-                saveLoginInfo(result.data.token, result.data.user);
-                showMessage('登录成功！', 'success');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            } else {
-                showMessage(result.message, 'danger');
+            // 显示加载状态
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>登录中...';
+            
+            try {
+                const result = await userAPI.login({ username, password });
+                
+                if (result.code === 200) {
+                    saveLoginInfo(result.data.token, result.data.user);
+                    showMessage('登录成功！正在跳转...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '../index.html';
+                    }, 1000);
+                } else {
+                    showMessage(result.message || '登录失败，请检查用户名和密码', 'danger');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            } catch (error) {
+                showMessage('网络错误，请检查后端服务是否启动', 'danger');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
             }
         });
     </script>

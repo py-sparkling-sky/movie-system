@@ -254,136 +254,91 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="frontend/js/api.js"></script>
     <script>
-        // 模拟电影数据（实际应用中应从数据库获取）
-        const movies = [
-            {
-                id: 1,
-                title: "盗梦空间",
-                rating: 4.5,
-                image: "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_FMjpg_UX600_.jpg",
-                genres: ["科幻", "动作", "惊悚"],
-                director: "克里斯托弗·诺兰",
-                year: 2010,
-                reason: "因为你喜欢《星际穿越》",
-                isHot: true,
-                rank: 4,
-                description: "一名能够潜入他人梦境窃取秘密的窃贼，被赋予了一个看似不可能的任务：不是窃取想法，而是植入一个想法。"
-            },
-            {
-                id: 2,
-                title: "星际穿越",
-                rating: 4.9,
-                image: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_FMjpg_UX600_.jpg",
-                genres: ["科幻", "冒险", "剧情"],
-                director: "克里斯托弗·诺兰",
-                year: 2014,
-                reason: "基于您选择的科幻标签",
-                isHot: true,
-                rank: 2,
-                description: "一群探险家利用新发现的虫洞，超越人类太空旅行的极限，在浩瀚宇宙中进行星际航行。"
-            },
-            {
-                id: 3,
-                title: "蝙蝠侠：黑暗骑士",
-                rating: 4.2,
-                image: "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX600_.jpg",
-                genres: ["动作", "犯罪", "剧情"],
-                director: "克里斯托弗·诺兰",
-                year: 2008,
-                reason: "同导演：克里斯托弗·诺兰",
-                isHot: true,
-                rank: 1,
-                description: "当小丑这样的威胁迫使蝙蝠侠接近 crossing the line between hero and vigilante 时，哥谭市需要它的黑暗骑士。"
-            },
-            {
-                id: 4,
-                title: "记忆碎片",
-                rating: 4.3,
-                image: "https://m.media-amazon.com/images/M/MV5BZTcyNjk1MjgtOWI3Mi00YzQwLWI5MTktMzY4ZmI2NDAyNzYzXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX600_.jpg",
-                genres: ["悬疑", "惊悚"],
-                director: "克里斯托弗·诺兰",
-                year: 2000,
-                reason: "相似叙事结构的电影",
-                isHot: false,
-                description: "一个患有短期失忆症的男子试图追踪杀害他妻子的人，利用笔记和纹身来记录信息。"
-            },
-            {
-                id: 5,
-                title: "指环王：王者归来",
-                rating: 4.8,
-                image: "https://m.media-amazon.com/images/M/MV5BNzA5ZDNlZWMtM2NhNS00NDJjLTk4NDItYTRmY2EwMWZlMTY3XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_FMjpg_UX300_.jpg",
-                genres: ["冒险", "奇幻", "剧情"],
-                director: "彼得·杰克逊",
-                year: 2003,
-                reason: "高评分奇幻电影",
-                isHot: true,
-                rank: 3,
-                description: "甘道夫和阿拉贡领导中土世界对抗索伦的军队，吸引他的注意力从弗罗多和山姆身上移开，他们接近魔多与魔戒。"
-            },
-            {
-                id: 6,
-                title: "辛德勒的名单",
-                rating: 4.9,
-                image: "https://m.media-amazon.com/images/M/MV5BNDE4OTMxMTctNmRhYy00NWE2LTg3YzItYTk3M2UwOTU5Njg4XkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX300_.jpg",
-                genres: ["剧情", "历史", "战争"],
-                director: "史蒂文·斯皮尔伯格",
-                year: 1993,
-                reason: "经典高分战争片",
-                isHot: true,
-                rank: 5,
-                description: "在波兰德国占领期间，奥斯卡·辛德勒通过在他的工厂雇佣他们来拯救一千多名犹太人的生命。"
-            },
-            {
-                id: 7,
-                title: "教父",
-                rating: 4.9,
-                image: "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_FMjpg_UX300_.jpg",
-                genres: ["犯罪", "剧情"],
-                director: "弗朗西斯·福特·科波拉",
-                year: 1972,
-                reason: "影史经典必看",
-                isHot: true,
-                rank: 6,
-                description: "黑手党家族的老族长将企业控制权移交给他不愿接手的儿子。"
-            },
-            {
-                id: 8,
-                title: "黑客帝国",
-                rating: 4.7,
-                image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_FMjpg_UX600_.jpg",
-                genres: ["动作", "科幻"],
-                director: "拉娜·沃卓斯基, 莉莉·沃卓斯基",
-                year: 1999,
-                reason: "科幻经典之作",
-                isHot: false,
-                description: "一名计算机黑客从神秘的反叛者那里了解到他的现实的真实性质以及他在与那些控制它的人的战争中的作用。"
+        // API基础地址
+        const API_BASE_URL = 'http://localhost:3000/api';
+
+        // HTTP请求封装
+        async function request(url, options = {}) {
+            const token = localStorage.getItem('token');
+            
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
             }
-        ];
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}${url}`, {
+                    ...options,
+                    headers
+                });
+                
+                const data = await response.json();
+                
+                if (data.code === 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = 'frontend/login.html';
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API请求失败:', error);
+                return { code: 500, message: '网络错误，请检查后端服务是否启动', data: null };
+            }
+        }
+
+        // 电影相关API
+        const movieAPI = {
+            getList: (params = {}) => {
+                const query = new URLSearchParams(params).toString();
+                return request(`/movies?${query}`);
+            },
+            getDetail: (id) => request(`/movies/${id}`),
+            getHot: (limit = 10) => request(`/movies/hot?limit=${limit}`)
+        };
+
+        // 观影相关API
+        const watchAPI = {
+            addFavorite: (movieId) => request('/watch/favorites', {
+                method: 'POST',
+                body: JSON.stringify({ movieId })
+            }),
+            removeFavorite: (movieId) => request(`/watch/favorites/${movieId}`, {
+                method: 'DELETE'
+            }),
+            checkFavorite: (movieId) => request(`/watch/favorites/check/${movieId}`)
+        };
 
         // 渲染电影卡片
-        function renderMovieCard(movie, isHot = false) {
-            const stars = generateStars(movie.rating);
-            const genres = movie.genres.map(genre => `<span class="genre-tag">${genre}</span>`).join('');
+        function renderMovieCard(movie, isHot = false, rank = 0) {
+            const rating = movie.rating || 0;
+            const stars = generateStars(rating);
+            const genres = movie.Genres ? movie.Genres.map(g => `<span class="genre-tag">${g.name}</span>`).join('') : '';
+            const poster = movie.poster || 'https://via.placeholder.com/300x450?text=No+Image';
             
             return `
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="card movie-card">
-                        ${isHot ? `<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">${movie.rank}</span>` : ''}
-                        <img src="${movie.image}" class="card-img-top" alt="${movie.title}">
+                        ${isHot ? `<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">${rank}</span>` : ''}
+                        <img src="${poster}" class="card-img-top" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
                         <div class="card-body">
                             <h5 class="card-title">${movie.title}</h5>
                             <div class="rating-stars mb-2">
                                 ${stars}
-                                <span class="ms-1">${movie.rating}</span>
+                                <span class="ms-1">${rating.toFixed(1)}</span>
                             </div>
                             <div class="mb-2">${genres}</div>
-                            ${movie.reason ? `<p class="recommendation-reason"><i class="bi bi-lightbulb"></i> ${movie.reason}</p>` : ''}
                             <div class="d-flex justify-content-between align-items-center">
                                 <a href="#" class="btn btn-sm btn-outline-primary view-detail" data-movie-id="${movie.id}">查看详情</a>
                                 <div>
-                                    <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-bookmark"></i></button>
-                                    <button class="btn btn-sm btn-outline-success"><i class="bi bi-play-circle"></i></button>
+                                    <button class="btn btn-sm btn-outline-secondary favorite-btn" data-movie-id="${movie.id}" title="收藏"><i class="bi bi-bookmark"></i></button>
+                                    <button class="btn btn-sm btn-outline-success" title="观看"><i class="bi bi-play-circle"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -414,77 +369,225 @@
             return stars;
         }
 
-        // 加载推荐电影
-        function loadPersonalRecommendations() {
-            const container = document.getElementById('personal-recommendations');
-            // 获取前4部电影作为推荐
-            const recommendedMovies = movies.slice(0, 4);
-            
-            container.innerHTML = recommendedMovies.map(movie => renderMovieCard(movie)).join('');
+        // 显示加载状态
+        function showLoading(containerId) {
+            document.getElementById(containerId).innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                    <p class="mt-2 text-muted">正在加载数据...</p>
+                </div>
+            `;
         }
 
-        // 加载热门电影
-        function loadHotMovies() {
-            const container = document.getElementById('hot-movies');
-            const hotMovies = movies.filter(movie => movie.isHot).sort((a, b) => a.rank - b.rank);
-            
-            // 热门电影使用不同的布局（col-xl-2）
-            container.innerHTML = hotMovies.map(movie => `
-                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-                    <div class="card movie-card">
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            ${movie.rank}
-                        </span>
-                        <img src="${movie.image}" class="card-img-top" alt="${movie.title}">
-                        <div class="card-body p-2">
-                            <h6 class="card-title mb-0">${movie.title}</h6>
-                            <small class="text-muted">${movie.genres.join('/')}</small>
-                        </div>
-                    </div>
+        // 显示错误信息
+        function showError(containerId, message) {
+            document.getElementById(containerId).innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-exclamation-triangle text-warning fs-1"></i>
+                    <p class="mt-2 text-danger">${message}</p>
+                    <button class="btn btn-sm btn-outline-primary retry-btn">重试</button>
                 </div>
-            `).join('');
+            `;
+        }
+
+        // 加载推荐电影（调用真实API）
+        async function loadPersonalRecommendations() {
+            const container = document.getElementById('personal-recommendations');
+            showLoading('personal-recommendations');
+            
+            try {
+                const result = await movieAPI.getList({ page: 1, limit: 4 });
+                
+                if (result.code === 200 && result.data && result.data.movies) {
+                    const movies = result.data.movies;
+                    if (movies.length > 0) {
+                        container.innerHTML = movies.map(movie => renderMovieCard(movie)).join('');
+                    } else {
+                        container.innerHTML = '<div class="col-12 text-center py-4 text-muted">暂无电影数据，请先添加电影</div>';
+                    }
+                } else {
+                    showError('personal-recommendations', result.message || '加载失败');
+                }
+            } catch (error) {
+                showError('personal-recommendations', '网络错误，请确保后端服务已启动');
+            }
+        }
+
+        // 加载热门电影（调用真实API）
+        async function loadHotMovies() {
+            const container = document.getElementById('hot-movies');
+            showLoading('hot-movies');
+            
+            try {
+                const result = await movieAPI.getHot(6);
+                
+                if (result.code === 200 && result.data) {
+                    const movies = result.data;
+                    if (movies.length > 0) {
+                        container.innerHTML = movies.map((movie, index) => `
+                            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                                <div class="card movie-card">
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        ${index + 1}
+                                    </span>
+                                    <img src="${movie.poster || 'https://via.placeholder.com/300x450?text=No+Image'}" class="card-img-top" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title mb-0">${movie.title}</h6>
+                                        <small class="text-muted">${movie.Genres ? movie.Genres.map(g => g.name).join('/') : ''}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        container.innerHTML = '<div class="col-12 text-center py-4 text-muted">暂无热门电影数据</div>';
+                    }
+                } else {
+                    showError('hot-movies', result.message || '加载失败');
+                }
+            } catch (error) {
+                showError('hot-movies', '网络错误，请确保后端服务已启动');
+            }
         }
 
         // 加载分类电影
-        function loadMoviesByGenre() {
-            const sciFiMovies = movies.filter(movie => movie.genres.includes('科幻')).slice(0, 4);
-            const actionMovies = movies.filter(movie => movie.genres.includes('动作')).slice(0, 4);
-            const comedyMovies = movies.filter(movie => movie.genres.includes('喜剧')).slice(0, 4);
+        async function loadMoviesByGenre() {
+            // 加载科幻电影
+            await loadGenreMovies('sci-fi-movies', '科幻');
+            // 加载动作电影
+            await loadGenreMovies('action-movies', '动作');
+            // 加载喜剧电影
+            await loadGenreMovies('comedy-movies', '喜剧');
+        }
+
+        // 加载指定分类的电影
+        async function loadGenreMovies(containerId, genreName) {
+            const container = document.getElementById(containerId);
             
-            document.getElementById('sci-fi-movies').innerHTML = sciFiMovies.map(movie => renderMovieCard(movie)).join('');
-            document.getElementById('action-movies').innerHTML = actionMovies.map(movie => renderMovieCard(movie)).join('');
-            document.getElementById('comedy-movies').innerHTML = comedyMovies.map(movie => renderMovieCard(movie)).join('');
+            try {
+                const result = await movieAPI.getList({ genre: genreName, page: 1, limit: 4 });
+                
+                if (result.code === 200 && result.data && result.data.movies) {
+                    const movies = result.data.movies;
+                    if (movies.length > 0) {
+                        container.innerHTML = movies.map(movie => renderMovieCard(movie)).join('');
+                    } else {
+                        container.innerHTML = '<div class="col-12 text-center py-4 text-muted">暂无该分类电影</div>';
+                    }
+                } else {
+                    container.innerHTML = '<div class="col-12 text-center py-4 text-muted">加载失败</div>';
+                }
+            } catch (error) {
+                container.innerHTML = '<div class="col-12 text-center py-4 text-muted">网络错误</div>';
+            }
         }
 
         // 显示电影详情
-        function showMovieDetail(movieId) {
-            const movie = movies.find(m => m.id === movieId);
-            if (!movie) return;
-            
-            const stars = generateStars(movie.rating);
-            const genres = movie.genres.map(genre => `<span class="badge bg-secondary me-1">${genre}</span>`).join('');
-            
-            document.getElementById('movieDetailModalLabel').textContent = movie.title;
-            document.getElementById('movie-detail-content').innerHTML = `
-                <div class="row">
-                    <div class="col-md-4">
-                        <img src="${movie.image}" class="img-fluid rounded" alt="${movie.title}">
-                    </div>
-                    <div class="col-md-8">
-                        <h4>${movie.title} (${movie.year})</h4>
-                        <div class="rating-stars mb-2">
-                            ${stars}
-                            <span class="ms-1">${movie.rating}</span>
+        async function showMovieDetail(movieId) {
+            try {
+                const result = await movieAPI.getDetail(movieId);
+                
+                if (result.code === 200 && result.data) {
+                    const movie = result.data;
+                    const rating = movie.rating || 0;
+                    const stars = generateStars(rating);
+                    const genres = movie.Genres ? movie.Genres.map(g => `<span class="badge bg-secondary me-1">${g.name}</span>`).join('') : '';
+                    const year = movie.release_date ? new Date(movie.release_date).getFullYear() : '未知';
+                    
+                    document.getElementById('movieDetailModalLabel').textContent = movie.title;
+                    document.getElementById('movie-detail-content').innerHTML = `
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="${movie.poster || 'https://via.placeholder.com/300x450?text=No+Image'}" class="img-fluid rounded" alt="${movie.title}" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                            </div>
+                            <div class="col-md-8">
+                                <h4>${movie.title} (${year})</h4>
+                                <div class="rating-stars mb-2">
+                                    ${stars}
+                                    <span class="ms-1">${rating.toFixed(1)}</span>
+                                </div>
+                                <p class="mb-2"><strong>导演:</strong> ${movie.director || '未知'}</p>
+                                <p class="mb-2"><strong>类型:</strong> ${genres || '未知'}</p>
+                                <p class="mb-2"><strong>时长:</strong> ${movie.duration ? movie.duration + '分钟' : '未知'}</p>
+                                <p class="mb-2"><strong>观看次数:</strong> ${movie.view_count || 0}</p>
+                                <p><strong>简介:</strong> ${movie.description || '暂无简介'}</p>
+                            </div>
                         </div>
-                        <p class="mb-2"><strong>导演:</strong> ${movie.director}</p>
-                        <p class="mb-2"><strong>类型:</strong> ${genres}</p>
-                        <p><strong>简介:</strong> ${movie.description}</p>
-                    </div>
-                </div>
-            `;
+                    `;
+                    
+                    const movieModal = new bootstrap.Modal(document.getElementById('movieDetailModal'));
+                    movieModal.show();
+                } else {
+                    alert(result.message || '获取电影详情失败');
+                }
+            } catch (error) {
+                alert('网络错误，请检查后端服务');
+            }
+        }
+
+        // 收藏/取消收藏电影
+        async function toggleFavorite(movieId, button) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('请先登录');
+                window.location.href = 'frontend/login.html';
+                return;
+            }
             
-            const movieModal = new bootstrap.Modal(document.getElementById('movieDetailModal'));
-            movieModal.show();
+            try {
+                const checkResult = await watchAPI.checkFavorite(movieId);
+                
+                if (checkResult.code === 200) {
+                    let result;
+                    if (checkResult.data && checkResult.data.isFavorite) {
+                        result = await watchAPI.removeFavorite(movieId);
+                        if (result.code === 200) {
+                            button.innerHTML = '<i class="bi bi-bookmark"></i>';
+                            button.classList.remove('btn-warning');
+                            button.classList.add('btn-outline-secondary');
+                            alert('已取消收藏');
+                        }
+                    } else {
+                        result = await watchAPI.addFavorite(movieId);
+                        if (result.code === 200) {
+                            button.innerHTML = '<i class="bi bi-bookmark-fill"></i>';
+                            button.classList.remove('btn-outline-secondary');
+                            button.classList.add('btn-warning');
+                            alert('收藏成功');
+                        }
+                    }
+                    
+                    if (result && result.code !== 200) {
+                        alert(result.message || '操作失败');
+                    }
+                }
+            } catch (error) {
+                alert('网络错误');
+            }
+        }
+
+        // 搜索电影
+        async function searchMovies(keyword) {
+            const container = document.getElementById('personal-recommendations');
+            showLoading('personal-recommendations');
+            
+            try {
+                const result = await movieAPI.getList({ keyword: keyword, page: 1, limit: 12 });
+                
+                if (result.code === 200 && result.data && result.data.movies) {
+                    const movies = result.data.movies;
+                    if (movies.length > 0) {
+                        container.innerHTML = movies.map(movie => renderMovieCard(movie)).join('');
+                    } else {
+                        container.innerHTML = '<div class="col-12 text-center py-4 text-muted">未找到相关电影</div>';
+                    }
+                } else {
+                    showError('personal-recommendations', result.message || '搜索失败');
+                }
+            } catch (error) {
+                showError('personal-recommendations', '网络错误');
+            }
         }
 
         // 初始化页面
@@ -500,21 +603,73 @@
                     const movieId = parseInt(e.target.closest('.view-detail').getAttribute('data-movie-id'));
                     showMovieDetail(movieId);
                 }
+                
+                // 收藏按钮事件
+                if (e.target.classList.contains('favorite-btn') || e.target.closest('.favorite-btn')) {
+                    e.preventDefault();
+                    const button = e.target.classList.contains('favorite-btn') ? e.target : e.target.closest('.favorite-btn');
+                    const movieId = parseInt(button.getAttribute('data-movie-id'));
+                    toggleFavorite(movieId, button);
+                }
+                
+                // 重试按钮事件
+                if (e.target.classList.contains('retry-btn')) {
+                    loadPersonalRecommendations();
+                    loadHotMovies();
+                    loadMoviesByGenre();
+                }
             });
             
             // 添加筛选按钮事件监听
             document.querySelectorAll('.filter-btn').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', async function() {
                     const genre = this.getAttribute('data-genre');
-                    alert(`筛选: ${genre} 类型的电影 - 实际应用中这里会筛选电影列表`);
+                    if (genre === 'all') {
+                        await loadPersonalRecommendations();
+                    } else {
+                        const genreMap = {
+                            'action': '动作',
+                            'comedy': '喜剧',
+                            'sci-fi': '科幻',
+                            'drama': '剧情',
+                            'horror': '恐怖'
+                        };
+                        const genreName = genreMap[genre] || genre;
+                        const container = document.getElementById('personal-recommendations');
+                        showLoading('personal-recommendations');
+                        
+                        try {
+                            const result = await movieAPI.getList({ genre: genreName, page: 1, limit: 8 });
+                            if (result.code === 200 && result.data && result.data.movies) {
+                                const movies = result.data.movies;
+                                if (movies.length > 0) {
+                                    container.innerHTML = movies.map(movie => renderMovieCard(movie)).join('');
+                                } else {
+                                    container.innerHTML = '<div class="col-12 text-center py-4 text-muted">该分类暂无电影</div>';
+                                }
+                            }
+                        } catch (error) {
+                            showError('personal-recommendations', '网络错误');
+                        }
+                    }
                 });
             });
             
             // 搜索功能
             document.getElementById('search-button').addEventListener('click', function() {
-                const searchTerm = document.getElementById('search-input').value;
-                if (searchTerm.trim()) {
-                    alert(`搜索: ${searchTerm} - 实际应用中这里会执行搜索`);
+                const searchTerm = document.getElementById('search-input').value.trim();
+                if (searchTerm) {
+                    searchMovies(searchTerm);
+                }
+            });
+            
+            // 回车搜索
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const searchTerm = this.value.trim();
+                    if (searchTerm) {
+                        searchMovies(searchTerm);
+                    }
                 }
             });
         });
