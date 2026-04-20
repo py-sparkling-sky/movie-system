@@ -92,7 +92,7 @@
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="index.html">
                 <i class="bi bi-camera-reels me-2"></i>观影系统
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -101,19 +101,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">首页</a>
+                        <a class="nav-link active" href="index.html">首页</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">电影库</a>
+                        <a class="nav-link" href="frontend/favorites.html">我的收藏</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">我的收藏</a>
+                        <a class="nav-link" href="frontend/records.html">观影记录</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="frontend/profile.html">个人中心</a>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="搜索电影..." aria-label="Search">
-                    <button class="btn btn-outline-light" type="submit">搜索</button>
-                </form>
+                <div class="d-flex align-items-center">
+                    <span class="text-light me-3" id="nav-user-info"></span>
+                    <button class="btn btn-outline-light btn-sm me-2" id="nav-logout-btn" style="display: none;">退出</button>
+                    <a class="btn btn-outline-light btn-sm" href="frontend/login.html" id="nav-login-btn">登录</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -590,11 +594,42 @@
             }
         }
 
+        // 更新导航栏用户状态
+        function updateNavbarUser() {
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+            const userInfo = document.getElementById('nav-user-info');
+            const logoutBtn = document.getElementById('nav-logout-btn');
+            const loginBtn = document.getElementById('nav-login-btn');
+            
+            if (token && userStr) {
+                const user = JSON.parse(userStr);
+                userInfo.textContent = `欢迎, ${user.nickname || user.username}`;
+                logoutBtn.style.display = 'inline-block';
+                loginBtn.style.display = 'none';
+            } else {
+                userInfo.textContent = '';
+                logoutBtn.style.display = 'none';
+                loginBtn.style.display = 'inline-block';
+            }
+        }
+
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
+            // 更新导航栏用户状态
+            updateNavbarUser();
+            
             loadPersonalRecommendations();
             loadHotMovies();
             loadMoviesByGenre();
+            
+            // 退出登录
+            document.getElementById('nav-logout-btn').addEventListener('click', function() {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                updateNavbarUser();
+                showMessage('已退出登录', 'info');
+            });
             
             // 添加查看详情事件监听
             document.addEventListener('click', function(e) {
