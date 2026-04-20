@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 观影系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #0c0c0c;
+        }
+        .section-title {
+            border-left: 4px solid #0d6efd;
+            padding-left: 12px;
+            margin: 30px 0 20px 0;
+            font-weight: 600;
+        }
+        .profile-card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .avatar-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 0 auto;
+        }
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .stat-card {
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .footer {
+            background-color: #212529;
+            color: #fff;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-camera-reels me-2"></i>观影系统
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="favorites.html">我的收藏</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="records.html">观影记录</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="profile.html">个人中心</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <span class="text-light me-3" id="user-info"></span>
+                    <button class="btn btn-outline-light btn-sm" id="logout-btn" style="display: none;">退出</button>
+                    <a class="btn btn-outline-light btn-sm" href="login.html" id="login-btn">登录</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区 -->
+    <div class="container py-4">
+        <!-- 用户信息卡片 -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card profile-card">
+                    <div class="card-body text-center py-4">
+                        <div class="avatar-container mb-3">
+                            <img src="https://via.placeholder.com/120x120?text=User" alt="头像" id="user-avatar">
+                        </div>
+                        <h4 id="display-nickname">加载中...</h4>
+                        <p class="text-muted mb-3" id="display-username">@username</p>
+                        <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="bi bi-pencil me-1"></i>编辑资料
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row g-3">
+                    <div class="col-sm-4">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-primary text-white me-3">
+                                        <i class="bi bi-bookmark-heart"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="mb-0" id="stat-favorites">0</h4>
+                                        <small class="text-muted">收藏数</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-success text-white me-3">
+                                        <i class="bi bi-clock-history"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="mb-0" id="stat-records">0</h4>
+                                        <small class="text-muted">观影数</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stat-icon bg-warning text-white me-3">
+                                        <i class="bi bi-calendar-check"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="mb-0" id="stat-days">0</h4>
+                                        <small class="text-muted">加入天数</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 账号信息 -->
+                <div class="card profile-card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-person-circle me-2"></i>账号信息</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <label class="text-muted small">邮箱</label>
+                                <p class="mb-0" id="display-email">-</p>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label class="text-muted small">注册时间</label>
+                                <p class="mb-0" id="display-created">-</p>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label class="text-muted small">账号角色</label>
+                                <p class="mb-0" id="display-role">普通用户</p>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label class="text-muted small">账号状态</label>
+                                <p class="mb-0"><span class="badge bg-success">正常</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 快捷操作 -->
+        <h3 class="section-title"><i class="bi bi-lightning me-2"></i>快捷操作</h3>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <a href="favorites.html" class="card stat-card text-decoration-none text-dark">
+                    <div class="card-body text-center py-4">
+                        <i class="bi bi-bookmark-heart fs-1 text-primary"></i>
+                        <h5 class="mt-2">我的收藏</h5>
+                        <p class="text-muted small mb-0">查看收藏的电影</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="records.html" class="card stat-card text-decoration-none text-dark">
+                    <div class="card-body text-center py-4">
+                        <i class="bi bi-clock-history fs-1 text-success"></i>
+                        <h5 class="mt-2">观影记录</h5>
+                        <p class="text-muted small mb-0">查看观看历史</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="../index.html" class="card stat-card text-decoration-none text-dark">
+                    <div class="card-body text-center py-4">
+                        <i class="bi bi-search fs-1 text-info"></i>
+                        <h5 class="mt-2">发现电影</h5>
+                        <p class="text-muted small mb-0">浏览更多电影</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card text-decoration-none text-dark" style="cursor: pointer;" id="change-password-btn">
+                    <div class="card-body text-center py-4">
+                        <i class="bi bi-key fs-1 text-warning"></i>
+                        <h5 class="mt-2">修改密码</h5>
+                        <p class="text-muted small mb-0">更新登录密码</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑资料模态框 -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">编辑资料</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="edit-nickname" class="form-label">昵称</label>
+                            <input type="text" class="form-control" id="edit-nickname" placeholder="请输入昵称">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-avatar" class="form-label">头像URL</label>
+                            <input type="url" class="form-control" id="edit-avatar" placeholder="请输入头像图片URL">
+                            <div class="form-text">支持 jpg、png 等格式的图片链接</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="save-profile-btn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p class="mb-0">© 2023 观影系统. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        // API基础地址
+        const API_BASE_URL = 'http://localhost:3000/api';
+
+        // HTTP请求封装
+        async function request(url, options = {}) {
+            const token = localStorage.getItem('token');
+            
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}${url}`, {
+                    ...options,
+                    headers
+                });
+                
+                const data = await response.json();
+                
+                if (data.code === 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = 'login.html';
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API请求失败:', error);
+                return { code: 500, message: '网络错误', data: null };
+            }
+        }
+
+        // 用户相关API
+        const userAPI = {
+            getProfile: () => request('/users/profile'),
+            updateProfile: (data) => request('/users/profile', {
+                method: 'PUT',
+                body: JSON.stringify(data)
+            })
+        };
+
+        // 观影相关API
+        const watchAPI = {
+            getFavorites: (params = {}) => {
+                const query = new URLSearchParams(params).toString();
+                return request(`/watch/favorites?${query}`);
+            },
+            getRecords: (params = {}) => {
+                const query = new URLSearchParams(params).toString();
+                return request(`/watch/records?${query}`);
+            }
+        };
+
+        // 检查登录状态
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+            
+            if (!token || !userStr) {
+                window.location.href = 'login.html';
+                return null;
+            }
+            
+            return JSON.parse(userStr);
+        }
+
+        // 更新导航栏用户信息
+        function updateNavbar(user) {
+            const userInfo = document.getElementById('user-info');
+            const logoutBtn = document.getElementById('logout-btn');
+            const loginBtn = document.getElementById('login-btn');
+            
+            if (user) {
+                userInfo.textContent = `欢迎, ${user.nickname || user.username}`;
+                logoutBtn.style.display = 'inline-block';
+                loginBtn.style.display = 'none';
+            } else {
+                userInfo.textContent = '';
+                logoutBtn.style.display = 'none';
+                loginBtn.style.display = 'inline-block';
+            }
+        }
+
+        // 格式化日期
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+        }
+
+        // 计算天数差
+        function daysSince(dateStr) {
+            if (!dateStr) return 0;
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+            return Math.floor(diff / (1000 * 60 * 60 * 24));
+        }
+
+        // 加载用户信息
+        async function loadProfile() {
+            try {
+                const result = await userAPI.getProfile();
+                
+                if (result.code === 200 && result.data) {
+                    const user = result.data;
+                    
+                    // 更新显示
+                    document.getElementById('display-nickname').textContent = user.nickname || user.username;
+                    document.getElementById('display-username').textContent = '@' + user.username;
+                    document.getElementById('display-email').textContent = user.email || '-';
+                    document.getElementById('display-created').textContent = formatDate(user.createdAt);
+                    document.getElementById('display-role').textContent = user.role === 1 ? '管理员' : '普通用户';
+                    
+                    // 更新头像
+                    if (user.avatar) {
+                        document.getElementById('user-avatar').src = user.avatar;
+                    }
+                    
+                    // 更新编辑表单
+                    document.getElementById('edit-nickname').value = user.nickname || '';
+                    document.getElementById('edit-avatar').value = user.avatar || '';
+                    
+                    // 更新localStorage
+                    localStorage.setItem('user', JSON.stringify(user));
+                    
+                    // 加载统计数据
+                    loadStats();
+                } else {
+                    showMessage(result.message || '获取用户信息失败', 'danger');
+                }
+            } catch (error) {
+                showMessage('网络错误', 'danger');
+            }
+        }
+
+        // 加载统计数据
+        async function loadStats() {
+            try {
+                // 获取收藏数
+                const favResult = await watchAPI.getFavorites({ page: 1, limit: 1 });
+                if (favResult.code === 200 && favResult.data) {
+                    const favCount = favResult.data.total || (favResult.data.favorites ? favResult.data.favorites.length : 0);
+                    document.getElementById('stat-favorites').textContent = favCount;
+                }
+                
+                // 获取观影记录数
+                const recResult = await watchAPI.getRecords({ page: 1, limit: 1 });
+                if (recResult.code === 200 && recResult.data) {
+                    const recCount = recResult.data.total || (recResult.data.records ? recResult.data.records.length : 0);
+                    document.getElementById('stat-records').textContent = recCount;
+                }
+                
+                // 计算加入天数
+                const userStr = localStorage.getItem('user');
+                if (userStr) {
+                    const user = JSON.parse(userStr);
+                    const days = daysSince(user.createdAt);
+                    document.getElementById('stat-days').textContent = days;
+                }
+            } catch (error) {
+                console.error('加载统计数据失败:', error);
+            }
+        }
+
+        // 保存资料
+        async function saveProfile() {
+            const nickname = document.getElementById('edit-nickname').value.trim();
+            const avatar = document.getElementById('edit-avatar').value.trim();
+            
+            const saveBtn = document.getElementById('save-profile-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>保存中...';
+            
+            try {
+                const result = await userAPI.updateProfile({ nickname, avatar });
+                
+                if (result.code === 200) {
+                    showMessage('保存成功', 'success');
+                    
+                    // 关闭模态框
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                    modal.hide();
+                    
+                    // 重新加载用户信息
+                    loadProfile();
+                } else {
+                    showMessage(result.message || '保存失败', 'danger');
+                }
+            } catch (error) {
+                showMessage('网络错误', 'danger');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '保存';
+            }
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = checkAuth();
+            if (user) {
+                updateNavbar(user);
+                loadProfile();
+            }
+            
+            // 退出登录
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            });
+            
+            // 保存资料
+            document.getElementById('save-profile-btn').addEventListener('click', saveProfile);
+            
+            // 修改密码提示
+            document.getElementById('change-password-btn').addEventListener('click', function() {
+                alert('修改密码功能暂未实现，请联系管理员');
+            });
+        });
+    </script>
+</body>
+</html>
