@@ -1,0 +1,366 @@
+/* ========================================
+   观影系统 - 通用样式
+   ======================================== */
+
+/* 全局样式 */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 导航栏 */
+.navbar {
+    background-color: #0c0c0c;
+}
+
+/* 区块标题 */
+.section-title {
+    border-left: 4px solid #0d6efd;
+    padding-left: 12px;
+    margin: 30px 0 20px 0;
+    font-weight: 600;
+}
+
+/* 电影卡片 */
+.movie-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 20px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 16px rgba(0, 0, 0, 0.2);
+}
+
+.movie-card img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 评分星星 */
+.rating-stars {
+    color: #fd7e14;
+}
+
+/* 推荐理由 */
+.recommendation-reason {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 12px;
+}
+
+/* 徽章 */
+.badge {
+    font-size: 0.7rem;
+    z-index: 1;
+}
+
+/* 搜索容器 */
+.search-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+/* 筛选按钮 */
+.filter-btn {
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+/* 页脚 */
+.footer {
+    background-color: #212529;
+    color: #fff;
+    padding: 40px 0;
+    margin-top: 50px;
+}
+
+/* 分类标签 */
+.genre-tag {
+    display: inline-block;
+    background-color: #e9ecef;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+/* 登录/注册页面样式 */
+.auth-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.auth-form .form-control {
+    border-radius: 5px;
+    padding: 12px;
+}
+
+.auth-form .btn-primary {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+}
+
+/* 个人中心样式 */
+.profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 0;
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid white;
+    object-fit: cover;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.stat-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* 管理后台样式 */
+.admin-sidebar {
+    background-color: #343a40;
+    min-height: calc(100vh - 56px);
+    padding-top: 20px;
+}
+
+.admin-sidebar .nav-link {
+    color: #adb5bd;
+    padding: 10px 20px;
+    border-radius: 0;
+}
+
+.admin-sidebar .nav-link:hover {
+    color: #fff;
+    background-color: #495057;
+}
+
+.admin-sidebar .nav-link.active {
+    color: #fff;
+    background-color: #0d6efd;
+}
+
+.admin-content {
+    padding: 20px;
+}
+
+.stat-card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-card .card-body {
+    padding: 20px;
+}
+
+.stat-icon {
+    font-size: 40px;
+    opacity: 0.8;
+}
+
+/* 观影记录样式 */
+.record-item {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+    transition: transform 0.2s;
+}
+
+.record-item:hover {
+    transform: translateX(5px);
+}
+
+.progress-bar-custom {
+    background-color: #e9ecef;
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, #0d6efd, #6610f0);
+    height: 100%;
+    transition: width 0.3s;
+}
+
+/* 收藏列表样式 */
+.favorite-card {
+    position: relative;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.favorite-card:hover {
+    transform: scale(1.02);
+}
+
+.favorite-card .remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.favorite-card:hover .remove-btn {
+    opacity: 1;
+}
+
+/* 加载动画 */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+/* 空状态提示 */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 60px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .movie-card img {
+        height: 250px;
+    }
+
+    .profile-header {
+        padding: 20px 0;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .stat-number {
+        font-size: 20px;
+    }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Toast提示样式 */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.custom-toast {
+    min-width: 250px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

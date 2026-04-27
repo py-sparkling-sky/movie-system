@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 观影系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #343a40;
+            min-height: 100vh;
+            color: #fff;
+        }
+        .sidebar .nav-link {
+            color: #adb5bd;
+            padding: 12px 20px;
+            border-radius: 0;
+        }
+        .sidebar .nav-link:hover {
+            color: #fff;
+            background-color: #495057;
+        }
+        .sidebar .nav-link.active {
+            color: #fff;
+            background-color: #0d6efd;
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .stat-card {
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .stat-card .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .table-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="row g-0">
+        <!-- 左侧导航栏 -->
+        <div class="col-md-2 sidebar">
+            <div class="p-3 border-bottom border-secondary">
+                <h5><i class="bi bi-speedometer2 me-2"></i>管理后台</h5>
+            </div>
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="#" data-page="dashboard">
+                    <i class="bi bi-house"></i>数据概览
+                </a>
+                <a class="nav-link" href="#" data-page="movies">
+                    <i class="bi bi-film"></i>电影管理
+                </a>
+                <a class="nav-link" href="#" data-page="users">
+                    <i class="bi bi-people"></i>用户管理
+                </a>
+            </nav>
+            <div class="p-3 mt-auto border-top border-secondary position-absolute bottom-0">
+                <a href="../index.html" class="btn btn-outline-light btn-sm w-100">
+                    <i class="bi bi-arrow-left me-1"></i>返回前台
+                </a>
+            </div>
+        </div>
+
+        <!-- 右侧内容区 -->
+        <div class="col-md-10 main-content">
+            <!-- 数据概览页面 -->
+            <div id="page-dashboard">
+                <h4 class="mb-4">数据概览</h4>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="icon bg-primary text-white me-3">
+                                    <i class="bi bi-film"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-0" id="stat-movies">0</h4>
+                                    <small class="text-muted">电影总数</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="icon bg-success text-white me-3">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-0" id="stat-users">0</h4>
+                                    <small class="text-muted">用户总数</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="icon bg-warning text-white me-3">
+                                    <i class="bi bi-bookmark-heart"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-0" id="stat-favorites">0</h4>
+                                    <small class="text-muted">收藏总数</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="icon bg-info text-white me-3">
+                                    <i class="bi bi-clock-history"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-0" id="stat-records">0</h4>
+                                    <small class="text-muted">观影记录</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <h5>热门电影 Top 5</h5>
+                    <table class="table table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th>排名</th>
+                                <th>电影名称</th>
+                                <th>评分</th>
+                                <th>观看次数</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hot-movies-table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 电影管理页面 -->
+            <div id="page-movies" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>电影管理</h4>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#movieModal" onclick="openAddMovieModal()">
+                        <i class="bi bi-plus-lg me-1"></i>添加电影
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>海报</th>
+                                <th>标题</th>
+                                <th>导演</th>
+                                <th>评分</th>
+                                <th>观看次数</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="movies-table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 用户管理页面 -->
+            <div id="page-users" style="display: none;">
+                <h4 class="mb-4">用户管理</h4>
+                <div class="table-container">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>用户名</th>
+                                <th>邮箱</th>
+                                <th>昵称</th>
+                                <th>角色</th>
+                                <th>状态</th>
+                                <th>注册时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加/编辑电影模态框 -->
+    <div class="modal fade" id="movieModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="movieModalTitle">添加电影</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="movieForm">
+                        <input type="hidden" id="movie-id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">标题 *</label>
+                                <input type="text" class="form-control" id="movie-title" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">导演</label>
+                                <input type="text" class="form-control" id="movie-director">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">海报URL</label>
+                            <input type="url" class="form-control" id="movie-poster" placeholder="https://example.com/poster.jpg">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">上映日期</label>
+                                <input type="date" class="form-control" id="movie-release-date">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">时长(分钟)</label>
+                                <input type="number" class="form-control" id="movie-duration">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">评分</label>
+                                <input type="number" class="form-control" id="movie-rating" step="0.1" min="0" max="10">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">分类（逗号分隔）</label>
+                            <input type="text" class="form-control" id="movie-genres" placeholder="动作, 科幻, 剧情">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">简介</label>
+                            <textarea class="form-control" id="movie-description" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="saveMovie()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:3000/api';
+        let genres = [];
+
+        // 请求封装
+        async function request(url, options = {}) {
+            const token = localStorage.getItem('token');
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            
+            const response = await fetch(`${API_BASE_URL}${url}`, { ...options, headers });
+            const data = await response.json();
+            
+            if (data.code === 401 || data.code === 403) {
+                alert(data.message || '权限不足');
+                window.location.href = 'login.html';
+            }
+            return data;
+        }
+
+        // 检查管理员权限
+        function checkAdmin() {
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+            if (!token || !userStr) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            const user = JSON.parse(userStr);
+            if (user.role !== 1) {
+                alert('需要管理员权限');
+                window.location.href = '../index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // 页面切换
+        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                
+                // 更新导航状态
+                document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 切换页面
+                document.querySelectorAll('[id^="page-"]').forEach(p => p.style.display = 'none');
+                document.getElementById(`page-${page}`).style.display = 'block';
+                
+                // 加载数据
+                if (page === 'dashboard') loadDashboard();
+                else if (page === 'movies') loadMovies();
+                else if (page === 'users') loadUsers();
+            });
+        });
+
+        // 加载仪表盘数据
+        async function loadDashboard() {
+            try {
+                const result = await request('/admin/statistics');
+                if (result.code === 200) {
+                    const stats = result.data;
+                    document.getElementById('stat-movies').textContent = stats.movieCount;
+                    document.getElementById('stat-users').textContent = stats.userCount;
+                    document.getElementById('stat-favorites').textContent = stats.favoriteCount;
+                    document.getElementById('stat-records').textContent = stats.recordCount;
+                    
+                    // 热门电影
+                    const tbody = document.getElementById('hot-movies-table');
+                    tbody.innerHTML = stats.hotMovies.map((m, i) => `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${m.title}</td>
+                            <td>${m.rating?.toFixed(1) || 0}</td>
+                            <td>${m.view_count || 0}</td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error('加载统计数据失败:', err);
+            }
+        }
+
+        // 加载电影列表
+        async function loadMovies() {
+            try {
+                const result = await request('/movies?page=1&limit=100');
+                if (result.code === 200) {
+                    const movies = result.data.movies || [];
+                    const tbody = document.getElementById('movies-table');
+                    tbody.innerHTML = movies.map(m => `
+                        <tr>
+                            <td>${m.id}</td>
+                            <td><img src="${m.poster || 'https://via.placeholder.com/50x70'}" width="50" height="70" style="object-fit:cover;border-radius:4px;"></td>
+                            <td>${m.title}</td>
+                            <td>${m.director || '-'}</td>
+                            <td>${m.rating?.toFixed(1) || 0}</td>
+                            <td>${m.view_count || 0}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" onclick="editMovie(${m.id})">编辑</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteMovie(${m.id}, '${m.title}')">删除</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error('加载电影列表失败:', err);
+            }
+        }
+
+        // 加载用户列表
+        async function loadUsers() {
+            try {
+                const result = await request('/admin/users?page=1&limit=100');
+                if (result.code === 200) {
+                    const users = result.data.users || [];
+                    const tbody = document.getElementById('users-table');
+                    tbody.innerHTML = users.map(u => `
+                        <tr>
+                            <td>${u.id}</td>
+                            <td>${u.username}</td>
+                            <td>${u.email}</td>
+                            <td>${u.nickname || '-'}</td>
+                            <td>${u.role === 1 ? '<span class="badge bg-danger">管理员</span>' : '<span class="badge bg-primary">用户</span>'}</td>
+                            <td>${u.status === 1 ? '<span class="badge bg-success">正常</span>' : '<span class="badge bg-secondary">禁用</span>'}</td>
+                            <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+                            <td>
+                                ${u.role !== 1 ? `
+                                    <button class="btn btn-sm ${u.status === 1 ? 'btn-outline-warning' : 'btn-outline-success'}" 
+                                            onclick="toggleUserStatus(${u.id}, ${u.status})">
+                                        ${u.status === 1 ? '禁用' : '启用'}
+                                    </button>
+                                ` : '-'}
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error('加载用户列表失败:', err);
+            }
+        }
+
+        // 打开添加电影模态框
+        function openAddMovieModal() {
+            document.getElementById('movieModalTitle').textContent = '添加电影';
+            document.getElementById('movieForm').reset();
+            document.getElementById('movie-id').value = '';
+        }
+
+        // 编辑电影
+        async function editMovie(id) {
+            try {
+                const result = await request(`/movies/${id}`);
+                if (result.code === 200) {
+                    const m = result.data;
+                    document.getElementById('movieModalTitle').textContent = '编辑电影';
+                    document.getElementById('movie-id').value = m.id;
+                    document.getElementById('movie-title').value = m.title || '';
+                    document.getElementById('movie-director').value = m.director || '';
+                    document.getElementById('movie-poster').value = m.poster || '';
+                    document.getElementById('movie-release-date').value = m.release_date ? m.release_date.split('T')[0] : '';
+                    document.getElementById('movie-duration').value = m.duration || '';
+                    document.getElementById('movie-rating').value = m.rating || '';
+                    document.getElementById('movie-description').value = m.description || '';
+                    document.getElementById('movie-genres').value = m.Genres ? m.Genres.map(g => g.name).join(', ') : '';
+                    
+                    new bootstrap.Modal(document.getElementById('movieModal')).show();
+                }
+            } catch (err) {
+                alert('获取电影信息失败');
+            }
+        }
+
+        // 保存电影
+        async function saveMovie() {
+            const id = document.getElementById('movie-id').value;
+            const data = {
+                title: document.getElementById('movie-title').value,
+                director: document.getElementById('movie-director').value,
+                poster: document.getElementById('movie-poster').value,
+                release_date: document.getElementById('movie-release-date').value,
+                duration: parseInt(document.getElementById('movie-duration').value) || null,
+                rating: parseFloat(document.getElementById('movie-rating').value) || 0,
+                description: document.getElementById('movie-description').value,
+                genres: document.getElementById('movie-genres').value.split(',').map(g => g.trim()).filter(g => g)
+            };
+            
+            if (!data.title) {
+                alert('请填写标题');
+                return;
+            }
+            
+            try {
+                let result;
+                if (id) {
+                    result = await request(`/admin/movies/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+                } else {
+                    result = await request('/admin/movies', { method: 'POST', body: JSON.stringify(data) });
+                }
+                
+                if (result.code === 200) {
+                    alert(result.message || '保存成功');
+                    bootstrap.Modal.getInstance(document.getElementById('movieModal')).hide();
+                    loadMovies();
+                } else {
+                    alert(result.message || '保存失败');
+                }
+            } catch (err) {
+                alert('保存失败');
+            }
+        }
+
+        // 删除电影
+        async function deleteMovie(id, title) {
+            if (!confirm(`确定要删除电影"${title}"吗？`)) return;
+            
+            try {
+                const result = await request(`/admin/movies/${id}`, { method: 'DELETE' });
+                if (result.code === 200) {
+                    alert('删除成功');
+                    loadMovies();
+                } else {
+                    alert(result.message || '删除失败');
+                }
+            } catch (err) {
+                alert('删除失败');
+            }
+        }
+
+        // 切换用户状态
+        async function toggleUserStatus(id, currentStatus) {
+            const newStatus = currentStatus === 1 ? 0 : 1;
+            const action = newStatus === 0 ? '禁用' : '启用';
+            
+            if (!confirm(`确定要${action}该用户吗？`)) return;
+            
+            try {
+                const result = await request(`/admin/users/${id}/status`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ status: newStatus })
+                });
+                
+                if (result.code === 200) {
+                    alert(result.message || '操作成功');
+                    loadUsers();
+                } else {
+                    alert(result.message || '操作失败');
+                }
+            } catch (err) {
+                alert('操作失败');
+            }
+        }
+
+        // 初始化
+        if (checkAdmin()) {
+            loadDashboard();
+        }
+    </script>
+</body>
+</html>

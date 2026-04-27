@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests/*.test.js",
+    "test:tmdb": "mocha tests/tmdbService.test.js",
+    "test:cache": "mocha tests/cache.test.js",
+    "test:rate": "mocha tests/rateLimiter.test.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +25,7 @@
     "sequelize": "^6.37.8"
   },
   "devDependencies": {
+    "mocha": "^10.2.0",
     "nodemon": "^3.1.14"
   }
 }
